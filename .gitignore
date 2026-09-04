@@ -33,6 +33,7 @@ pubspec.lock
 
 # Firebase
 **/firebase_options.dart
+**/google-services.json
 .dart_tool/
 .firebase/
 
