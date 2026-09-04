@@ -36,14 +36,28 @@ AlgoForge is designed to cover the entire spectrum of competitive programming an
 
 ---
 
+[![Download APK](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)](https://github.com/taksh1507/AlgoForge/releases/latest)
+
+---
+
 ## 🏗 Architecture & Codebase
 
-The project is structured into clear layers for maintainability:
-* `lib/models/`: Core data models (User, Problem, SkillProfile, RevisionCard).
-* `lib/providers/`: State management and business logic orchestrators.
-* `lib/services/`: External integrations (FirestoreService, AuthService, LeetcodeSyncService).
-* `lib/engine/`: Pure Dart algorithms for the Knowledge Graph, Recommendation Engine, and SRS algorithms.
-* `lib/screens/` & `lib/widgets/`: UI layer.
+The project is structured into clear layers for maintainability following an MVVM-inspired architecture:
+
+```text
+dsa_platform_flutter/
+├── lib/
+│   ├── engine/           # Pure Dart logic (Knowledge Graph, SRS, Recommendations)
+│   ├── models/           # Data classes (User, Problem, SkillProfile)
+│   ├── providers/        # State management (UserProvider, ProblemProvider)
+│   ├── screens/          # Full-page UI views (Dashboard, Search, Learn)
+│   ├── services/         # External integrations (Firestore, Firebase Auth, LeetCode API)
+│   ├── utils/            # Theme, Constants, TextStyles, Helpers
+│   ├── widgets/          # Reusable UI components (ProblemCard, RadarChart, Heatmap)
+│   └── main.dart         # Entry point & App routing
+├── functions/            # Firebase Cloud Functions (if applicable)
+└── data/                 # Static data assets (e.g., knowledge_graph.json)
+```
 
 ---
 
