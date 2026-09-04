@@ -1,101 +1,72 @@
-# AlgoForge
+# AlgoForge 🚀
 
-Adaptive DSA Learning & Revision Platform — Flutter Android app with Firebase backend.
+**AlgoForge** is an intelligent, adaptive Data Structures and Algorithms (DSA) learning and revision platform built with Flutter and Firebase. It dynamically syncs your real-time LeetCode progress and utilizes spaced repetition and a custom knowledge graph to help you master competitive programming efficiently.
 
-## Architecture
+---
 
-- **Frontend**: Flutter (Dart) with Monad design system
-- **Backend**: Firebase (Firestore, Auth, Cloud Functions)
-- **DSA Engine**: Runs locally on device (zero latency)
+## ✨ Key Features
 
-## DSA Concepts Demonstrated
+* **🔗 Live LeetCode Sync:** Connects directly to a custom Alfa API backend to fetch your exact LeetCode profile, solved problems, current streaks, and attempt history. No manual tracking required!
+* **🕸️ Dynamic Skill Breakdown:** Uses your LeetCode data to generate a dynamic "Radar Chart" (spiderweb graph) that maps out your strengths and weaknesses across 15+ DSA topics (Dynamic Programming, Trees, Graphs, Arrays, etc.).
+* **🧠 Spaced Repetition System (SRS):** A built-in "Revise Today" queue that tracks the problems you solve and uses scientifically proven spaced repetition algorithms to remind you to practice problems right before you forget them.
+* **🗺️ Smart Knowledge Graph:** Features an underlying directed acyclic graph (DAG) structure that understands DSA topic relationships (e.g., you must learn "Arrays" before "Hash Tables").
+* **🎯 Personalized Recommendations:** The recommendation engine combines the Knowledge Graph with your personal Skill Radar to pinpoint exactly which problem you should solve next to maximize improvement.
+* **🔍 Offline-First Problem Search:** A powerful search engine pre-seeded with real LeetCode problems (fetched from the API) allowing you to filter by title, difficulty, and topic tags.
 
-| Concept | Implementation |
-|---------|---------------|
-| HashMap | User skill lookup, problem indexing |
-| HashSet | Solved problem tracking |
-| Graph (Adjacency List) | Knowledge graph — topics ↔ problems |
-| BFS | Related problem discovery (1 hop) |
-| DFS | Deep topic traversal (2 hops) |
-| DAG | Prerequisite relationships |
-| Topological Sort | Learning path ordering (Kahn's algorithm) |
-| Max Heap | Recommendation scoring |
-| Min Heap | Revision scheduling |
-| Trie | Prefix-based problem search |
-| Inverted Index | Company/tag/difficulty filtering |
-| Sliding Window | Recent performance stats |
-| Binary Search | Difficulty targeting |
-| Spaced Repetition (SM-2) | Adaptive revision intervals |
+## 🛠 Tech Stack
 
-## Setup
+* **Frontend:** Flutter (Dart)
+* **State Management:** Provider pattern (MVVM-inspired architecture)
+* **Backend:** Firebase (Cloud Firestore NoSQL database, Firebase Auth)
+* **API Integration:** REST HTTP polling to the [Alfa LeetCode API](https://github.com/alfa-leetcode-api)
+* **UI/UX:** Custom Monad design system with rich typography and micro-animations.
+
+---
+
+## 🏗 Architecture & Codebase
+
+The project is structured into clear layers for maintainability:
+* `lib/models/`: Core data models (User, Problem, SkillProfile, RevisionCard).
+* `lib/providers/`: State management and business logic orchestrators.
+* `lib/services/`: External integrations (FirestoreService, AuthService, LeetcodeSyncService).
+* `lib/engine/`: Pure Dart algorithms for the Knowledge Graph, Recommendation Engine, and SRS algorithms.
+* `lib/screens/` & `lib/widgets/`: UI layer.
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Flutter SDK 3.x
-- Firebase CLI
-- Node.js 18+
+* Flutter SDK (v3.10+)
+* A Firebase Project with Firestore enabled.
+* An active deployment of the [Alfa LeetCode API](https://github.com/alfa-leetcode-api) (e.g., on Render or Vercel).
 
-### 1. Flutter App
-```bash
-cd dsa_platform_flutter
-flutter pub get
-flutter run
-```
+### Installation
 
-### 2. Firebase Functions
-```bash
-cd functions
-npm install
-npm run build
-firebase deploy --only functions
-```
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/taksh1507/AlgoForge.git
+   cd AlgoForge/dsa_platform_flutter
+   ```
 
-### 3. Firestore
-```bash
-firebase deploy --only firestore:rules
-firebase deploy --only firestore:indexes
-```
+2. **Fetch dependencies:**
+   ```bash
+   flutter pub get
+   ```
 
-## Project Structure
+3. **Configure Firebase:**
+   * Add your `google-services.json` to `android/app/`.
+   * Add your `GoogleService-Info.plist` to `ios/Runner/`.
 
-```
-dsa-platform/
-├── DESIGN_SPEC.md              # Monad UI design tokens
-├── ARCHITECTURE.md             # System architecture
-├── firebase.json               # Firebase config
-├── firestore.rules             # Security rules
-├── firestore.indexes.json      # Composite indexes
-│
-├── dsa_platform_flutter/       # Flutter app
-│   ├── lib/
-│   │   ├── main.dart           # Entry point
-│   │   ├── app.dart            # Routing
-│   │   ├── models/             # Data models
-│   │   ├── services/           # Firebase services
-│   │   ├── engine/             # DSA algorithms (runs on device)
-│   │   ├── providers/          # State management
-│   │   ├── screens/            # UI screens
-│   │   ├── widgets/            # Reusable widgets
-│   │   └── utils/              # Theme, constants
-│   └── pubspec.yaml
-│
-├── functions/                  # Firebase Cloud Functions
-│   ├── src/index.ts            # All functions
-│   ├── package.json
-│   └── tsconfig.json
-│
-└── data/
-    └── knowledge_graph.json    # Topic/prerequisite graph
-```
+4. **Run the App:**
+   ```bash
+   flutter run
+   ```
 
-## Screens
+5. **Sync Your Data:**
+   * Create an account / login.
+   * Go to the Profile or Dashboard tab.
+   * Enter your LeetCode username and tap **Sync My Data**. The app will fetch your data, populate your radar chart, and build your personalized revision queue!
 
-1. **Splash** — App intro
-2. **Login** — Enter LeetCode username
-3. **Dashboard** — Recommendations, revisions, skills, calendar
-4. **Problem Detail** — Why this problem, prerequisites, similar
-5. **Rate Problem** — Time, attempts, hints, confidence
-6. **Learn** — Topic cards with progress
-7. **Learning Path** — Topological sort path
-8. **Search** — Trie prefix search + filters
-9. **Profile** — Skills, calendar, achievements
-10. **Revision** — Spaced repetition queue
+---
+*Built for the grind. Happy coding! 💻*
