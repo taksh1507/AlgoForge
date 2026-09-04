@@ -35,8 +35,8 @@ AlgoForge is designed to cover the entire spectrum of competitive programming an
 * **UI/UX:** Custom Monad design system with rich typography and micro-animations.
 
 ---
-
-[![Download APK](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)](https://github.com/taksh1507/AlgoForge/releases/latest)
+[![Download APK](https://img.shields.io/badge/Download-APK-green?style=for-the-badge&logo=android)](https://github.com/taksh1507/AlgoForge/releases/download/v1.0.0/app-release.apk)
+[Direct APK Download (v1.0.0)](https://github.com/taksh1507/AlgoForge/releases/download/v1.0.0/app-release.apk)
 
 ---
 
