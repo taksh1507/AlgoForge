@@ -1,0 +1,122 @@
+[
+  {
+    "topic": "Arrays",
+    "prerequisites": [],
+    "relatedTopics": ["Hashing", "Two Pointers", "Sliding Window"],
+    "problems": ["two-sum", "best-time-to-buy-and-sell-stock", "contains-duplicate"],
+    "difficulty": "EASY",
+    "description": "Foundation: storing and accessing elements in contiguous memory"
+  },
+  {
+    "topic": "Hashing",
+    "prerequisites": ["Arrays"],
+    "relatedTopics": ["Two Pointers", "Sliding Window"],
+    "problems": ["two-sum", "group-anagrams", "top-k-frequent-elements"],
+    "difficulty": "EASY",
+    "description": "Using hash maps for O(1) lookups"
+  },
+  {
+    "topic": "Two Pointers",
+    "prerequisites": ["Arrays", "Hashing"],
+    "relatedTopics": ["Sliding Window", "Sorting"],
+    "problems": ["two-sum-ii", "3sum", "4sum", "container-with-most-water"],
+    "difficulty": "MEDIUM",
+    "description": "Using two indices to traverse arrays efficiently"
+  },
+  {
+    "topic": "Sliding Window",
+    "prerequisites": ["Arrays", "Hashing", "Two Pointers"],
+    "relatedTopics": ["String", "Subarray"],
+    "problems": ["longest-substring-without-repeating-characters", "minimum-size-subarray-sum", "sliding-window-maximum"],
+    "difficulty": "MEDIUM",
+    "description": "Maintaining a window over data for efficient subarray/substring problems"
+  },
+  {
+    "topic": "Binary Search",
+    "prerequisites": ["Arrays"],
+    "relatedTopics": ["Sorting", "Matrix"],
+    "problems": ["binary-search", "search-in-rotated-sorted-array", "find-minimum-in-rotated-sorted-array"],
+    "difficulty": "MEDIUM",
+    "description": "Divide and conquer on sorted data"
+  },
+  {
+    "topic": "Sorting",
+    "prerequisites": ["Arrays"],
+    "relatedTopics": ["Two Pointers", "Binary Search"],
+    "problems": ["sort-colors", "merge-intervals", "meeting-rooms-ii"],
+    "difficulty": "MEDIUM",
+    "description": "Arranging data in order for efficient processing"
+  },
+  {
+    "topic": "Stack",
+    "prerequisites": ["Arrays"],
+    "relatedTopics": ["Monotonic Stack", "String"],
+    "problems": ["valid-parentheses", "min-stack", "daily-temperatures"],
+    "difficulty": "MEDIUM",
+    "description": "LIFO data structure for nested/sequential problems"
+  },
+  {
+    "topic": "Binary Trees",
+    "prerequisites": ["Stack", "Recursion"],
+    "relatedTopics": ["BST", "Tree Traversal"],
+    "problems": ["maximum-depth-of-binary-tree", "invert-binary-tree", "binary-tree-level-order-traversal"],
+    "difficulty": "MEDIUM",
+    "description": "Tree data structure with at most two children"
+  },
+  {
+    "topic": "BST",
+    "prerequisites": ["Binary Trees"],
+    "relatedTopics": ["Tree Traversal", "Binary Search"],
+    "problems": ["validate-binary-search-tree", "search-in-a-binary-search-tree", "kth-smallest-element-in-a-bst"],
+    "difficulty": "MEDIUM",
+    "description": "Ordered tree with left < root < right"
+  },
+  {
+    "topic": "Graphs",
+    "prerequisites": ["Arrays", "Hashing"],
+    "relatedTopics": ["BFS", "DFS", "Topological Sort"],
+    "problems": ["number-of-islands", "clone-graph", "course-schedule"],
+    "difficulty": "HARD",
+    "description": "Network of connected nodes"
+  },
+  {
+    "topic": "BFS",
+    "prerequisites": ["Graphs", "Binary Trees"],
+    "relatedTopics": ["DFS", "Shortest Path"],
+    "problems": ["binary-tree-level-order-traversal", "word-ladder", "rotting-oranges"],
+    "difficulty": "MEDIUM",
+    "description": "Level-by-level graph traversal"
+  },
+  {
+    "topic": "DFS",
+    "prerequisites": ["Graphs", "Binary Trees"],
+    "relatedTopics": ["BFS", "Backtracking"],
+    "problems": ["number-of-islands", "validate-binary-search-tree", "path-sum-ii"],
+    "difficulty": "MEDIUM",
+    "description": "Deep-first graph traversal"
+  },
+  {
+    "topic": "Dynamic Programming",
+    "prerequisites": ["Recursion", "Arrays"],
+    "relatedTopics": ["Greedy", "Binary Search"],
+    "problems": ["climbing-stairs", "coin-change", "longest-increasing-subsequence"],
+    "difficulty": "HARD",
+    "description": "Optimal substructure with memoization"
+  },
+  {
+    "topic": "Greedy",
+    "prerequisites": ["Arrays", "Sorting"],
+    "relatedTopics": ["Dynamic Programming"],
+    "problems": ["jump-game", "merge-intervals", "partition-labels"],
+    "difficulty": "MEDIUM",
+    "description": "Making locally optimal choices at each step"
+  },
+  {
+    "topic": "Recursion",
+    "prerequisites": [],
+    "relatedTopics": ["Dynamic Programming", "Backtracking"],
+    "problems": ["factorial", "fibonacci-number", "power-of-two"],
+    "difficulty": "EASY",
+    "description": "Functions that call themselves"
+  }
+]

@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can only read/write their own data
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+
+      match /attempts/{attemptId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+      match /skills/{topic} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+      match /revision/{slug} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+      match /recommendations {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // Problems are public read-only
+    match /problems/{slug} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Knowledge graph is public read-only
+    match /knowledge_graph/{topic} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Company index is public read-only
+    match /company_index/{company} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
