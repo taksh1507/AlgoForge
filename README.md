@@ -13,6 +13,19 @@
 * **🎯 Personalized Recommendations:** The recommendation engine combines the Knowledge Graph with your personal Skill Radar to pinpoint exactly which problem you should solve next to maximize improvement.
 * **🔍 Offline-First Problem Search:** A powerful search engine pre-seeded with real LeetCode problems (fetched from the API) allowing you to filter by title, difficulty, and topic tags.
 
+## 📚 Supported Data Structures & Algorithms
+
+AlgoForge is designed to cover the entire spectrum of competitive programming and technical interviews. The platform's Knowledge Graph and Recommendation Engine specifically target mastery in:
+
+* **Basic Data Structures:** Arrays, Strings, Linked Lists, Stacks, Queues, Hash Tables.
+* **Trees & Graphs:** Binary Trees, Binary Search Trees (BST), Tries, Graph Traversals (BFS, DFS), Shortest Path (Dijkstra, Bellman-Ford), Minimum Spanning Trees, Union-Find / Disjoint Sets.
+* **Algorithmic Paradigms:** 
+  * **Dynamic Programming (DP):** Memoization, Tabulation, Knapsack, Longest Common Subsequence.
+  * **Greedy Algorithms:** Activity Selection, Huffman Coding.
+  * **Divide & Conquer:** Merge Sort, Quick Sort, Binary Search variants.
+  * **Backtracking:** N-Queens, Sudoku Solver, Subset generation.
+* **Advanced Topics:** Two Pointers, Sliding Window, Bit Manipulation, Monotonic Stacks, Segment Trees, Topological Sort.
+
 ## 🛠 Tech Stack
 
 * **Frontend:** Flutter (Dart)
