@@ -18,14 +18,15 @@ class TopicCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(
-          color: AppColors.parchment,
+          color: palette.card,
           borderRadius: BorderRadius.circular(AppRadii.card),
-          border: Border.all(color: AppColors.ash, width: 1),
+          border: Border.all(color: palette.line, width: 1),
         ),
         child: Row(
           children: [
@@ -35,7 +36,7 @@ class TopicCard extends StatelessWidget {
                 children: [
                   Text(
                     topic,
-                    style: AppTextStyles.body(color: AppColors.offBlack),
+                    style: AppTextStyles.body(color: palette.ink),
                   ),
                   const SizedBox(height: 8),
                   // Progress bar
@@ -46,9 +47,9 @@ class TopicCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(2),
                           child: LinearProgressIndicator(
                             value: score / 100,
-                            backgroundColor: AppColors.ash.withOpacity(0.3),
-                            valueColor: const AlwaysStoppedAnimation<Color>(
-                              AppColors.lakeBlue,
+                            backgroundColor: palette.line.withOpacity(0.3),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              palette.accent,
                             ),
                             minHeight: 4,
                           ),
@@ -57,7 +58,7 @@ class TopicCard extends StatelessWidget {
                       const SizedBox(width: AppSpacing.sm),
                       Text(
                         '$score%',
-                        style: AppTextStyles.label(color: AppColors.smoke),
+                        style: AppTextStyles.label(color: palette.muted),
                       ),
                     ],
                   ),
@@ -69,7 +70,7 @@ class TopicCard extends StatelessWidget {
                 padding: EdgeInsets.only(left: AppSpacing.md),
                 child: Text(
                   'Needs work',
-                  style: AppTextStyles.bodySmall(color: AppColors.coral),
+                  style: AppTextStyles.bodySmall(color: palette.danger),
                 ),
               ),
           ],

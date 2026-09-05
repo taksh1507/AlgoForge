@@ -51,12 +51,12 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Scaffold(
-      backgroundColor: AppColors.parchment,
       body: SafeArea(
         child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: AppColors.lakeBlue),
+            ? Center(
+                child: CircularProgressIndicator(color: palette.accent),
               )
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(AppSpacing.lg),
@@ -109,7 +109,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                             Container(
                               width: 1,
                               height: 24,
-                              color: AppColors.ash,
+                              color: palette.line,
                             ),
                         ],
                       );
@@ -145,7 +145,7 @@ class _LearningPathScreenState extends State<LearningPathScreen> {
                           padding: EdgeInsets.all(AppSpacing.xxl),
                           child: Text(
                             'No problems available for this path yet',
-                            style: AppTextStyles.label(color: AppColors.smoke),
+                            style: AppTextStyles.label(color: palette.faint),
                           ),
                         ),
                       ),

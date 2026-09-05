@@ -20,6 +20,7 @@ class _SearchScreenState extends State<SearchScreen> {
   String _selectedTopic = '';
   List<Problem> _results = [];
   bool _hasSearched = false;
+  final ScrollController _scrollController = ScrollController();
 
   final _topics = [
     'Array', 'String', 'Hash Map', 'Tree', 'Graph',
@@ -29,8 +30,28 @@ class _SearchScreenState extends State<SearchScreen> {
   final _difficulties = ['EASY', 'MEDIUM', 'HARD'];
 
   @override
+  void initState() {
+    super.initState();
+    _loadInitial();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
+        context.read<ProblemProvider>().loadMore();
+      }
+    });
+  }
+
+  Future<void> _loadInitial() async {
+    final provider = context.read<ProblemProvider>();
+    if (provider.problems.isEmpty && !provider.isLoading) {
+      await provider.loadProblems();
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -66,8 +87,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
+    final problemProvider = context.watch<ProblemProvider>();
+
     return Scaffold(
-      backgroundColor: AppColors.parchment,
       body: SafeArea(
         child: Column(
           children: [
@@ -82,8 +105,8 @@ class _SearchScreenState extends State<SearchScreen> {
                     onChanged: (_) => _performSearch(),
                     decoration: InputDecoration(
                       hintText: 'Search problems...',
-                      hintStyle: AppTextStyles.label(color: AppColors.smoke),
-                      prefixIcon: const Icon(Icons.search, color: AppColors.smoke, size: 20),
+                      hintStyle: AppTextStyles.label(color: palette.faint),
+                      prefixIcon: Icon(Icons.search, color: palette.faint, size: 20),
                       suffixIcon: _controller.text.isNotEmpty
                           ? IconButton(
                               icon: const Icon(Icons.clear, size: 18),
@@ -95,18 +118,18 @@ class _SearchScreenState extends State<SearchScreen> {
                           : null,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadii.tag),
-                        borderSide: const BorderSide(color: AppColors.ash),
+                        borderSide: BorderSide(color: palette.line),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadii.tag),
-                        borderSide: const BorderSide(color: AppColors.ash),
+                        borderSide: BorderSide(color: palette.line),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadii.tag),
-                        borderSide: const BorderSide(color: AppColors.lakeBlue),
+                        borderSide: BorderSide(color: palette.accent),
                       ),
                       filled: true,
-                      fillColor: AppColors.parchment,
+                      fillColor: palette.field,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: AppSpacing.md,
                         vertical: AppSpacing.sm,
@@ -121,7 +144,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     children: [
                       Text(
                         'DIFFICULTY:',
-                        style: AppTextStyles.labelTiny(color: AppColors.smoke),
+                        style: AppTextStyles.labelTiny(color: palette.faint),
                       ),
                       const SizedBox(width: AppSpacing.sm),
                       ..._difficulties.map((d) {
@@ -139,8 +162,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: isSelected ? AppColors.offBlack : Colors.transparent,
-                                border: Border.all(color: AppColors.ash, width: 1),
+                                color: isSelected ? palette.ink : Colors.transparent,
+                                border: Border.all(color: palette.line, width: 1),
                                 borderRadius: BorderRadius.circular(AppRadii.tag),
                               ),
                               child: Text(
@@ -148,7 +171,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 style: AppTextStyles.labelTiny(
                                   color: isSelected
                                       ? Colors.white
-                                      : AppColors.offBlack,
+                                      : palette.ink,
                                 ),
                               ),
                             ),
@@ -179,8 +202,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 4),
                               decoration: BoxDecoration(
-                                color: isSelected ? AppColors.offBlack : Colors.transparent,
-                                border: Border.all(color: AppColors.ash, width: 1),
+                                color: isSelected ? palette.ink : Colors.transparent,
+                                border: Border.all(color: palette.line, width: 1),
                                 borderRadius: BorderRadius.circular(AppRadii.tag),
                               ),
                               child: Text(
@@ -188,7 +211,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 style: AppTextStyles.labelTiny(
                                   color: isSelected
                                       ? Colors.white
-                                      : AppColors.offBlack,
+                                      : palette.ink,
                                 ),
                               ),
                             ),
@@ -203,20 +226,85 @@ class _SearchScreenState extends State<SearchScreen> {
 
             // Results
             Expanded(
-              child: _buildResults(),
+              child: _hasSearched ? _buildSearchResults(palette) : _buildBrowseResults(palette, problemProvider),
             ),
+
+            if (problemProvider.isLoading)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildResults() {
+  Widget _buildBrowseResults(AppPalette palette, ProblemProvider provider) {
+    if (provider.isLoading && provider.problems.isEmpty) {
+      return Center(
+        child: Text(
+          'Loading problems...',
+          style: AppTextStyles.label(color: palette.faint),
+        ),
+      );
+    }
+
+    if (provider.problems.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'No problems found',
+              style: AppTextStyles.label(color: palette.faint),
+            ),
+            const SizedBox(height: AppSpacing.md),
+            TextButton.icon(
+              onPressed: () => provider.refresh(),
+              icon: const Icon(Icons.refresh, size: 18),
+              label: const Text('Retry'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      controller: _scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      itemCount: provider.problems.length,
+      itemBuilder: (context, index) {
+        final problem = provider.problems[index];
+        return ProblemCard(
+          problem: problem,
+          subtitle: problem.topics.join(' · '),
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              '/problem-detail',
+              arguments: {
+                'problem': problem,
+                'reason': null,
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildSearchResults(AppPalette palette) {
     if (!_hasSearched) {
       return Center(
         child: Text(
           'Type to search problems',
-          style: AppTextStyles.label(color: AppColors.smoke),
+          style: AppTextStyles.label(color: palette.faint),
         ),
       );
     }
@@ -225,7 +313,7 @@ class _SearchScreenState extends State<SearchScreen> {
       return Center(
         child: Text(
           'No problems found',
-          style: AppTextStyles.label(color: AppColors.smoke),
+          style: AppTextStyles.label(color: palette.faint),
         ),
       );
     }

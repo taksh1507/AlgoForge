@@ -123,8 +123,16 @@ class FirestoreService {
   // ── Problems ──────────────────────────────────────────────────
 
   Stream<List<Problem>> problemsStream({int limit = 100}) {
-    return _problems.limit(limit).snapshots().map((snapshot) =>
-        snapshot.docs.map((doc) => Problem.fromFirestore(doc.data() as Map<String, dynamic>)).toList());
+    // Order by question id so cached orders match the API's numeric order —
+    // without this, DB fallback lists sort alphabetically by slug and the list
+    // "jumps" to the next question when the API source takes over.
+    return _problems
+        .orderBy('questionId')
+        .limit(limit)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Problem.fromFirestore(doc.data() as Map<String, dynamic>))
+            .toList());
   }
 
   Future<Problem?> getProblem(String slug) async {

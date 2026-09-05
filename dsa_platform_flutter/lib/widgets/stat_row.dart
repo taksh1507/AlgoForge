@@ -10,11 +10,12 @@ class StatRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(color: AppColors.ash, width: 0.5),
+          top: BorderSide(color: palette.line, width: 0.5),
         ),
       ),
       child: Row(

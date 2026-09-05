@@ -17,12 +17,13 @@ class RevisionCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.parchment,
+        color: palette.card,
         borderRadius: BorderRadius.circular(AppRadii.card),
-        border: Border.all(color: AppColors.ash, width: 1),
+        border: Border.all(color: palette.line, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,7 +37,7 @@ class RevisionCardWidget extends StatelessWidget {
             children: [
               Text(
                 card.lastResult == 'failed' ? 'Last: Failed' : 'Last: Solved',
-                style: AppTextStyles.labelSmall(color: card.lastResult == 'failed' ? AppColors.coral : AppColors.mint),
+                style: AppTextStyles.labelSmall(color: card.lastResult == 'failed' ? palette.danger : palette.success),
               ),
               const SizedBox(width: AppSpacing.md),
               Text(
@@ -52,7 +53,7 @@ class RevisionCardWidget extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: onGotIt,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.offBlack,
+                    backgroundColor: palette.ink,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
@@ -62,7 +63,7 @@ class RevisionCardWidget extends StatelessWidget {
                   ),
                   child: Text(
                     'GOT IT',
-                    style: AppTextStyles.labelSmall(color: AppColors.offBlack),
+                    style: AppTextStyles.labelSmall(color: palette.ink),
                   ),
                 ),
               ),
@@ -71,16 +72,16 @@ class RevisionCardWidget extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: onForgot,
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: AppColors.offBlack,
+                    foregroundColor: palette.ink,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(AppRadii.button),
                     ),
-                    side: const BorderSide(color: AppColors.offBlack, width: 1),
+                    side: BorderSide(color: palette.ink, width: 1),
                   ),
                   child: Text(
                     'FORGOT',
-                    style: AppTextStyles.labelSmall(color: AppColors.offBlack),
+                    style: AppTextStyles.labelSmall(color: palette.ink),
                   ),
                 ),
               ),

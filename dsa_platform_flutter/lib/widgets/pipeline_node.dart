@@ -16,12 +16,13 @@ class PipelineNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: _bgColor(),
+        color: _bgColor(palette),
         border: Border.all(
-          color: _borderColor(),
+          color: _borderColor(palette),
           width: status == 'locked' ? 1 : 1.5,
           style: status == 'locked' ? BorderStyle.solid : BorderStyle.solid,
         ),
@@ -30,18 +31,18 @@ class PipelineNode extends StatelessWidget {
       child: Row(
         children: [
           if (status == 'done')
-            const Icon(Icons.check, size: 16, color: AppColors.offBlack),
+            Icon(Icons.check, size: 16, color: palette.ink),
           if (status == 'current')
             Container(
               width: 8,
               height: 8,
-              decoration: const BoxDecoration(
-                color: AppColors.lakeBlue,
+              decoration: BoxDecoration(
+                color: palette.accent,
                 shape: BoxShape.circle,
               ),
             ),
           if (status == 'locked')
-            Icon(Icons.lock, size: 16, color: AppColors.smoke.withOpacity(0.5)),
+            Icon(Icons.lock, size: 16, color: palette.faint.withOpacity(0.5)),
           const SizedBox(width: AppSpacing.sm),
           Expanded(
             child: Text(
@@ -59,29 +60,29 @@ class PipelineNode extends StatelessWidget {
     );
   }
 
-  Color _bgColor() {
+  Color _bgColor(AppPalette palette) {
     switch (status) {
       case 'done':
-        return AppColors.parchment;
+        return palette.card;
       case 'current':
-        return AppColors.parchment;
+        return palette.card;
       case 'locked':
-        return AppColors.parchment.withOpacity(0.5);
+        return palette.card.withOpacity(0.5);
       default:
-        return AppColors.parchment;
+        return palette.card;
     }
   }
 
-  Color _borderColor() {
+  Color _borderColor(AppPalette palette) {
     switch (status) {
       case 'done':
-        return AppColors.offBlack;
+        return palette.ink;
       case 'current':
-        return AppColors.lakeBlue;
+        return palette.accent;
       case 'locked':
-        return AppColors.ash;
+        return palette.line;
       default:
-        return AppColors.ash;
+        return palette.line;
     }
   }
 }

@@ -5,103 +5,136 @@ import 'constants.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData get light {
+  static ThemeData get light => _build(
+        brightness: Brightness.light,
+        bg: AppPalette.light.bg,
+        card: AppPalette.light.card,
+        field: AppPalette.light.field,
+        ink: AppPalette.light.ink,
+        muted: AppPalette.light.muted,
+        faint: AppPalette.light.faint,
+        line: AppPalette.light.line,
+        accent: AppPalette.light.accent,
+        accentSoft: AppPalette.light.accentSoft,
+      );
+
+  static ThemeData get dark => _build(
+        brightness: Brightness.dark,
+        bg: AppPalette.dark.bg,
+        card: AppPalette.dark.card,
+        field: AppPalette.dark.field,
+        ink: AppPalette.dark.ink,
+        muted: AppPalette.dark.muted,
+        faint: AppPalette.dark.faint,
+        line: AppPalette.dark.line,
+        accent: AppPalette.dark.accent,
+        accentSoft: AppPalette.dark.accentSoft,
+      );
+
+  static ThemeData _build({
+    required Brightness brightness,
+    required Color bg,
+    required Color card,
+    required Color field,
+    required Color ink,
+    required Color muted,
+    required Color faint,
+    required Color line,
+    required Color accent,
+    required Color accentSoft,
+  }) {
+    final head = (double size) => GoogleFonts.playfairDisplay(
+          fontSize: size,
+          fontWeight: FontWeight.w400,
+          color: ink,
+        );
+    final body = (double size, {FontWeight? w, Color? color}) =>
+        GoogleFonts.spaceMono(
+          fontSize: size,
+          fontWeight: w ?? FontWeight.w400,
+          color: color ?? muted,
+        );
+
     return ThemeData(
-      scaffoldBackgroundColor: AppColors.parchment,
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.lakeBlue,
-        onPrimary: Colors.white,
-        surface: AppColors.parchment,
-        onSurface: AppColors.offBlack,
-        outline: AppColors.ash,
+      brightness: brightness,
+      scaffoldBackgroundColor: bg,
+      colorScheme: ColorScheme(
+        brightness: brightness,
+        primary: accent,
+        onPrimary: ink,
+        secondary: accent,
+        onSecondary: ink,
+        error: AppColors.coral,
+        onError: ink,
+        surface: card,
+        onSurface: ink,
+        outline: line,
+        surfaceContainerHighest: accentSoft,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.parchment,
-        foregroundColor: AppColors.offBlack,
+      appBarTheme: AppBarTheme(
+        backgroundColor: bg,
+        foregroundColor: ink,
         elevation: 0,
         scrolledUnderElevation: 0,
+        iconTheme: IconThemeData(color: ink),
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.playfairDisplay(
-          fontSize: 48,
-          fontWeight: FontWeight.w400,
-          color: AppColors.offBlack,
-        ),
-        displayMedium: GoogleFonts.playfairDisplay(
-          fontSize: 32,
-          fontWeight: FontWeight.w400,
-          color: AppColors.offBlack,
-        ),
-        headlineMedium: GoogleFonts.playfairDisplay(
-          fontSize: 24,
-          fontWeight: FontWeight.w400,
-          color: AppColors.offBlack,
-        ),
-        headlineSmall: GoogleFonts.playfairDisplay(
-          fontSize: 20,
-          fontWeight: FontWeight.w400,
-          color: AppColors.offBlack,
-        ),
-        bodyLarge: GoogleFonts.spaceMono(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: AppColors.graphite,
-        ),
-        bodyMedium: GoogleFonts.spaceMono(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          color: AppColors.graphite,
-        ),
-        bodySmall: GoogleFonts.spaceMono(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          color: AppColors.smoke,
-        ),
-        labelLarge: GoogleFonts.spaceMono(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: AppColors.offBlack,
-        ),
-        labelMedium: GoogleFonts.spaceMono(
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
-          color: AppColors.smoke,
-        ),
+        displayLarge: head(48),
+        displayMedium: head(32),
+        headlineMedium: head(24),
+        headlineSmall: head(20),
+        titleLarge: head(18),
+        bodyLarge: body(16),
+        bodyMedium: body(14),
+        bodySmall: body(12, color: faint),
+        labelLarge: body(14, w: FontWeight.w500, color: ink),
+        labelMedium: body(12, w: FontWeight.w500, color: faint),
       ),
+      dividerTheme: DividerThemeData(color: line, thickness: 1),
       cardTheme: CardThemeData(
-        color: AppColors.parchment,
+        color: card,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadii.card),
-          side: const BorderSide(color: AppColors.ash, width: 1),
+          side: BorderSide(color: line, width: 1),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.parchment,
+        fillColor: field,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.md,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.input),
-          borderSide: const BorderSide(color: AppColors.ash, width: 1),
+          borderSide: BorderSide(color: line, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.input),
-          borderSide: const BorderSide(color: AppColors.ash, width: 1),
+          borderSide: BorderSide(color: line, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadii.input),
-          borderSide: const BorderSide(color: AppColors.lakeBlue, width: 1.5),
+          borderSide: BorderSide(color: accent, width: 1.5),
         ),
+        hintStyle: TextStyle(color: faint),
+        labelStyle: TextStyle(color: faint),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: AppColors.parchment,
-        selectedItemColor: AppColors.lakeBlue,
-        unselectedItemColor: AppColors.smoke,
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: bg,
+        selectedItemColor: accent,
+        unselectedItemColor: faint,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: ink,
+        contentTextStyle: TextStyle(color: bg),
+      ),
+      switchTheme: SwitchThemeData(
+        trackColor: WidgetStatePropertyAll(accentSoft),
+        thumbColor: WidgetStatePropertyAll(accent),
       ),
     );
   }

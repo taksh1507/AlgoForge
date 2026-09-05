@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'utils/app_theme.dart';
 import 'utils/constants.dart';
-import 'providers/user_provider.dart';
+import 'utils/text_styles.dart';
+import 'providers/notification_provider.dart';
+import 'providers/settings_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
@@ -13,18 +15,31 @@ import 'screens/learning_path_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/revision_screen.dart';
+import 'screens/notifications_screen.dart';
+import 'screens/code_editor_screen.dart';
+import 'screens/analytics_screen.dart';
+import 'screens/interview_prep_screen.dart';
 import 'models/problem.dart';
 import 'models/recommendation.dart';
+
+/// Global route observer used to detect when the user returns to a screen
+/// (e.g. back from solving a problem) so it can refresh its state.
+final RouteObserver<ModalRoute<void>> routeObserver =
+    RouteObserver<ModalRoute<void>>();
 
 class DSAPlatformApp extends StatelessWidget {
   const DSAPlatformApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final settings = context.watch<SettingsProvider>();
     return MaterialApp(
       title: 'AlgoForge',
       theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: settings.themeMode,
       debugShowCheckedModeBanner: false,
+      navigatorObservers: [routeObserver],
       initialRoute: '/splash',
       onGenerateRoute: (settings) {
         switch (settings.name) {
@@ -65,6 +80,15 @@ class DSAPlatformApp extends StatelessWidget {
             return MaterialPageRoute(
               builder: (_) => RateProblemScreen(problem: problem),
             );
+          case '/code':
+            final problem = settings.arguments as Problem?;
+            return MaterialPageRoute(
+              builder: (_) => CodeEditorScreen(problemTitle: problem?.title),
+            );
+          case '/analytics':
+            return MaterialPageRoute(builder: (_) => const AnalyticsScreen());
+          case '/interview':
+            return MaterialPageRoute(builder: (_) => const InterviewPrepScreen());
           case '/learning-path':
             final topic = settings.arguments as String;
             return MaterialPageRoute(
@@ -72,6 +96,9 @@ class DSAPlatformApp extends StatelessWidget {
             );
           case '/revision':
             return MaterialPageRoute(builder: (_) => const RevisionScreen());
+          case '/notifications':
+            return MaterialPageRoute(
+                builder: (_) => const NotificationsScreen());
           default:
             return MaterialPageRoute(builder: (_) => const SplashScreen());
         }
@@ -99,12 +126,65 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: Text(
+          'AlgoForge',
+          style: AppTextStyles.heading3(),
+        ),
+        actions: [
+          Consumer<NotificationProvider>(
+            builder: (context, notificationProvider, _) {
+              final unread = notificationProvider.unreadCount;
+              return Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  IconButton(
+                    tooltip: 'Notifications',
+                    icon: Icon(Icons.notifications_none, color: palette.ink),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, '/notifications'),
+                  ),
+                  if (unread > 0)
+                    Positioned(
+                      right: 4,
+                      top: 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 5, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: palette.danger,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                            minWidth: 16, minHeight: 16),
+                        child: Center(
+                          child: Text(
+                            '$unread',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
       body: _screens[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           border: Border(
-            top: BorderSide(color: AppColors.ash, width: 0.5),
+            top: BorderSide(color: palette.line, width: 0.5),
           ),
         ),
         child: BottomNavigationBar(

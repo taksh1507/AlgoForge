@@ -25,8 +25,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppColors.parchment,
+    final palette = context.palette;
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -37,17 +37,17 @@ class _SplashScreenState extends State<SplashScreen> {
                 fontFamily: 'UntitledSerif',
                 fontSize: 48,
                 fontWeight: FontWeight.w400,
-                color: AppColors.offBlack,
+                color: palette.ink,
               ),
             ),
-            SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.md),
             Text(
               'Forge your algorithm skills',
               style: TextStyle(
                 fontFamily: 'ABCDiatypeMono',
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
-                color: AppColors.graphite,
+                color: palette.muted,
               ),
             ),
           ],

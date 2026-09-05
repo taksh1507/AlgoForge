@@ -12,22 +12,24 @@ class RecommendationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<RecommendationProvider>(
       builder: (context, recProvider, _) {
+        final palette = context.palette;
         if (recProvider.isLoading) {
-          return _buildLoadingCard();
+          return _buildLoadingCard(palette);
         }
 
         final recs = recProvider.recommendations;
         if (recs.isEmpty) {
-          return _buildEmptyCard();
+          return _buildEmptyCard(palette);
         }
 
         final top = recs.first;
-        return _buildRecommendation(context, top);
+        return _buildRecommendation(context, palette, top);
       },
     );
   }
 
-  Widget _buildRecommendation(BuildContext context, Recommendation rec) {
+  Widget _buildRecommendation(
+      BuildContext context, AppPalette palette, Recommendation rec) {
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
@@ -43,7 +45,7 @@ class RecommendationCard extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(
-          color: AppColors.periwinkleMist,
+          color: palette.accentSoft,
           borderRadius: BorderRadius.circular(AppRadii.card),
         ),
         child: Column(
@@ -51,7 +53,7 @@ class RecommendationCard extends StatelessWidget {
           children: [
             Text(
               '⭐ NEXT PROBLEM',
-              style: AppTextStyles.statLabel(color: AppColors.lakeBlue),
+              style: AppTextStyles.statLabel(color: palette.accent),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
@@ -61,7 +63,7 @@ class RecommendationCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.xs),
             Text(
               'Score: ${rec.score.round()}/100',
-              style: AppTextStyles.label(color: AppColors.graphite),
+              style: AppTextStyles.label(color: palette.muted),
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
@@ -69,14 +71,15 @@ class RecommendationCard extends StatelessWidget {
               style: AppTextStyles.bodySmall(),
             ),
             const SizedBox(height: AppSpacing.md),
-            Row(
+            Wrap(
+              spacing: AppSpacing.sm,
+              runSpacing: AppSpacing.sm,
               children: [
-                _buildTag(rec.difficulty, _difficultyColor(rec.difficulty)),
-                const SizedBox(width: AppSpacing.sm),
-                for (final topic in rec.topics.take(2)) ...[
-                  _buildTag(topic, AppColors.offBlack),
-                  const SizedBox(width: AppSpacing.sm),
-                ],
+                _buildTag(
+                    rec.difficulty, _difficultyColor(palette, rec.difficulty),
+                    palette),
+                for (final topic in rec.topics.take(2))
+                  _buildTag(topic, palette.ink, palette),
               ],
             ),
           ],
@@ -85,12 +88,12 @@ class RecommendationCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLoadingCard() {
+  Widget _buildLoadingCard(AppPalette palette) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.periwinkleMist,
+        color: palette.accentSoft,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: Column(
@@ -98,31 +101,31 @@ class RecommendationCard extends StatelessWidget {
         children: [
           Text(
             '⭐ NEXT PROBLEM',
-            style: AppTextStyles.statLabel(color: AppColors.lakeBlue),
+            style: AppTextStyles.statLabel(color: palette.accent),
           ),
           SizedBox(height: AppSpacing.sm),
           SizedBox(
             height: 24,
             width: 120,
-            child: LinearProgressIndicator(backgroundColor: AppColors.ash),
+            child: LinearProgressIndicator(backgroundColor: palette.line),
           ),
           SizedBox(height: AppSpacing.sm),
           SizedBox(
             height: 14,
             width: 200,
-            child: LinearProgressIndicator(backgroundColor: AppColors.ash),
+            child: LinearProgressIndicator(backgroundColor: palette.line),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildEmptyCard() {
+  Widget _buildEmptyCard(AppPalette palette) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: AppColors.periwinkleMist,
+        color: palette.accentSoft,
         borderRadius: BorderRadius.circular(AppRadii.card),
       ),
       child: Column(
@@ -130,23 +133,23 @@ class RecommendationCard extends StatelessWidget {
         children: [
           Text(
             '⭐ NEXT PROBLEM',
-            style: AppTextStyles.statLabel(color: AppColors.lakeBlue),
+            style: AppTextStyles.statLabel(color: palette.accent),
           ),
           SizedBox(height: AppSpacing.sm),
           Text(
             'Sync your LeetCode data to get personalized recommendations',
-            style: AppTextStyles.label(color: AppColors.smoke),
+            style: AppTextStyles.label(color: palette.faint),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildTag(String text, Color color) {
+  Widget _buildTag(String text, Color color, AppPalette palette) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.ash, width: 1),
+        border: Border.all(color: palette.line, width: 1),
         borderRadius: BorderRadius.circular(AppRadii.tag),
       ),
       child: Text(
@@ -156,16 +159,16 @@ class RecommendationCard extends StatelessWidget {
     );
   }
 
-  Color _difficultyColor(String difficulty) {
+  Color _difficultyColor(AppPalette palette, String difficulty) {
     switch (difficulty) {
       case 'EASY':
-        return AppColors.mint;
+        return palette.success;
       case 'MEDIUM':
-        return AppColors.gold;
+        return palette.warn;
       case 'HARD':
-        return AppColors.coral;
+        return palette.danger;
       default:
-        return AppColors.offBlack;
+        return palette.ink;
     }
   }
 }

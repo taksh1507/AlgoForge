@@ -37,8 +37,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Scaffold(
-      backgroundColor: AppColors.parchment,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.lg),
@@ -57,30 +57,30 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: 'LeetCode username',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadii.tag),
-                    borderSide: const BorderSide(color: AppColors.ash),
+                    borderSide: BorderSide(color: palette.line),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadii.tag),
-                    borderSide: const BorderSide(color: AppColors.ash),
+                    borderSide: BorderSide(color: palette.line),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppRadii.tag),
-                    borderSide: const BorderSide(color: AppColors.lakeBlue),
+                    borderSide: BorderSide(color: palette.accent),
                   ),
                   filled: true,
-                  fillColor: AppColors.parchment,
+                  fillColor: palette.field,
                 ),
                 style: AppTextStyles.label(),
                 onSubmitted: (_) => _syncData(),
               ),
               const SizedBox(height: AppSpacing.sm),
-              const Text(
+              Text(
                 'WE PULL YOUR DATA FROM LEETCODE',
                 style: TextStyle(
                   fontFamily: 'ABCDiatypeMono',
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.smoke,
+                  color: palette.faint,
                   letterSpacing: 1.2,
                 ),
               ),
@@ -90,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ElevatedButton(
                   onPressed: _isSyncing ? null : _syncData,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.lakeBlue,
+                    backgroundColor: palette.accent,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(

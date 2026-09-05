@@ -1,7 +1,7 @@
 name: algoforge
 description: AlgoForge — Adaptive DSA Learning & Revision Platform
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -28,6 +28,12 @@ dependencies:
 
   # HTTP
   dio: ^5.4.0
+  http: ^1.2.0
+
+  # Local Notifications (free — no FCM needed)
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.4
+  permission_handler: ^11.3.1
 
   # UI — google_fonts downloads fonts automatically, no assets/fonts/ needed
   google_fonts: ^6.1.0

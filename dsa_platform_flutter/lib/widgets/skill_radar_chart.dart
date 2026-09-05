@@ -13,6 +13,7 @@ class SkillRadarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
       builder: (context, userProvider, _) {
+        final palette = context.palette;
         final skillProfile = userProvider.skillProfile;
         if (skillProfile == null || skillProfile.topics.isEmpty) {
           return SizedBox(
@@ -21,7 +22,7 @@ class SkillRadarChart extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.analytics_outlined, size: 40, color: AppColors.ash),
+                  Icon(Icons.analytics_outlined, size: 40, color: palette.line),
                   const SizedBox(height: 8),
                   Text(
                     'Solve problems to see skills',
@@ -39,6 +40,7 @@ class SkillRadarChart extends StatelessWidget {
             size: const Size(200, 200),
             painter: _RadarPainter(
               topics: skillProfile.sortedTopics.take(6).toList(),
+              accent: palette.accent,
             ),
           ),
         );
@@ -49,8 +51,9 @@ class SkillRadarChart extends StatelessWidget {
 
 class _RadarPainter extends CustomPainter {
   final List<MapEntry<String, TopicScore>> topics;
+  final Color accent;
 
-  _RadarPainter({required this.topics});
+  _RadarPainter({required this.topics, required this.accent});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -129,11 +132,11 @@ class _RadarPainter extends CustomPainter {
 
     // Draw data polygon
     final dataPaint = Paint()
-      ..color = AppColors.lakeBlue.withOpacity(0.25)
+      ..color = accent.withOpacity(0.25)
       ..style = PaintingStyle.fill;
 
     final borderPaint = Paint()
-      ..color = AppColors.lakeBlue
+      ..color = accent
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
@@ -158,7 +161,7 @@ class _RadarPainter extends CustomPainter {
 
     // Draw dots
     final dotPaint = Paint()
-      ..color = AppColors.lakeBlue
+      ..color = accent
       ..style = PaintingStyle.fill;
 
     for (int i = 0; i < count; i++) {

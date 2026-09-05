@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../utils/constants.dart';
 import '../utils/text_styles.dart';
 import '../models/problem.dart';
+import '../providers/user_provider.dart';
+import '../providers/revision_provider.dart';
+import '../providers/gamification_provider.dart';
+import '../services/firestore_service.dart';
 
 class RateProblemScreen extends StatefulWidget {
   final Problem problem;
@@ -29,8 +34,8 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Scaffold(
-      backgroundColor: AppColors.parchment,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(AppSpacing.lg),
@@ -44,15 +49,15 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
               const SizedBox(height: AppSpacing.xl),
 
               // Time
-              _buildField('TIME (MIN)', _timeController),
+              _buildField(palette, 'TIME (MIN)', _timeController),
               const SizedBox(height: AppSpacing.lg),
 
               // Attempts
-              _buildField('ATTEMPTS', _attemptsController),
+              _buildField(palette, 'ATTEMPTS', _attemptsController),
               const SizedBox(height: AppSpacing.lg),
 
               // Hints
-              _buildField('HINTS USED', _hintsController),
+              _buildField(palette, 'HINTS USED', _hintsController),
               const SizedBox(height: AppSpacing.lg),
 
               // Solution viewed
@@ -61,12 +66,12 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
                 children: [
                   Text(
                     'SOLUTION VIEWED',
-                    style: AppTextStyles.statLabel(color: AppColors.smoke),
+                    style: AppTextStyles.statLabel(color: palette.faint),
                   ),
                   Switch(
                     value: _solutionViewed,
                     onChanged: (v) => setState(() => _solutionViewed = v),
-                    activeColor: AppColors.lakeBlue,
+                    activeColor: palette.accent,
                   ),
                 ],
               ),
@@ -75,7 +80,7 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
               // Confidence
               Text(
                 'CONFIDENCE',
-                style: AppTextStyles.statLabel(color: AppColors.smoke),
+                style: AppTextStyles.statLabel(color: palette.faint),
               ),
               const SizedBox(height: AppSpacing.md),
               Row(
@@ -86,7 +91,7 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
                       padding: const EdgeInsets.only(right: 8),
                       child: Icon(
                         index < _confidence ? Icons.star : Icons.star_border,
-                        color: index < _confidence ? AppColors.lakeBlue : AppColors.ash,
+                        color: index < _confidence ? palette.accent : palette.line,
                         size: 32,
                       ),
                     ),
@@ -99,13 +104,70 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Save attempt and navigate back
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    final messenger = ScaffoldMessenger.of(context);
+                    final uid =
+                        context.read<UserProvider>().profile?.uid ?? '';
+                    final revisionProvider =
+                        context.read<RevisionProvider>();
+                    final gamification =
+                        context.read<GamificationProvider>();
+
+                    if (uid.isNotEmpty) {
+                      try {
+                        final firestore = FirestoreService();
+                        await firestore.saveAttempt(uid, {
+                          'problemSlug': widget.problem.titleSlug,
+                          'problemTitle': widget.problem.title,
+                          'status': 'SOLVED',
+                          'timeTakenMin':
+                              int.tryParse(_timeController.text) ?? 0,
+                          'attempts':
+                              int.tryParse(_attemptsController.text) ?? 1,
+                          'hintsUsed':
+                              int.tryParse(_hintsController.text) ?? 0,
+                          'solutionViewed': _solutionViewed,
+                          'confidence': _confidence,
+                          'topics': widget.problem.topics,
+                          'difficulty': widget.problem.difficulty,
+                        });
+
+                        await revisionProvider.addRevision(
+                          uid,
+                          widget.problem.titleSlug,
+                          widget.problem.title,
+                        );
+
+                        // Gamification: solve XP + quest progress + badges.
+                        final difficultyXp = switch (widget.problem.difficulty) {
+                          'EASY' => 10,
+                          'MEDIUM' => 20,
+                          'HARD' => 35,
+                          _ => 10,
+                        };
+                        await gamification.recordSolve(difficultyXp: difficultyXp);
+                        await gamification.evaluateBadges(
+                          streak: context.read<UserProvider>().profile?.streak ?? 0,
+                        );
+
+                        messenger.showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Completed! +$difficultyXp XP · ${gamification.level}',
+                            ),
+                          ),
+                        );
+                      } catch (e) {
+                        print('RateProblem save failed: $e');
+                      }
+                    }
+
+                    navigator.pop();
+                    navigator.pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.offBlack,
+                    backgroundColor: palette.ink,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -126,20 +188,20 @@ class _RateProblemScreenState extends State<RateProblemScreen> {
     );
   }
 
-  Widget _buildField(String label, TextEditingController controller) {
+  Widget _buildField(AppPalette palette, String label, TextEditingController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: AppTextStyles.statLabel(color: AppColors.smoke),
+          style: AppTextStyles.statLabel(color: palette.faint),
         ),
         const SizedBox(height: AppSpacing.sm),
         TextField(
           controller: controller,
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(),
-          style: AppTextStyles.body(color: AppColors.offBlack),
+          style: AppTextStyles.body(color: palette.ink),
         ),
       ],
     );

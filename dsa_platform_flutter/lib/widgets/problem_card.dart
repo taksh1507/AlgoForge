@@ -17,13 +17,14 @@ class ProblemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: AppColors.ash, width: 0.5),
+            bottom: BorderSide(color: palette.line, width: 0.5),
           ),
         ),
         child: Row(
@@ -61,7 +62,7 @@ class ProblemCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.ash, width: 1),
+                border: Border.all(color: palette.line, width: 1),
                 borderRadius: BorderRadius.circular(AppRadii.tag),
               ),
               child: Text(

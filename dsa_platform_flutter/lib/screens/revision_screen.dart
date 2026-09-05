@@ -4,15 +4,23 @@ import '../utils/constants.dart';
 import '../utils/text_styles.dart';
 import '../providers/revision_provider.dart';
 import '../providers/user_provider.dart';
+import '../providers/gamification_provider.dart';
 import '../widgets/revision_card_widget.dart';
 
-class RevisionScreen extends StatelessWidget {
+class RevisionScreen extends StatefulWidget {
   const RevisionScreen({super.key});
 
   @override
+  State<RevisionScreen> createState() => _RevisionScreenState();
+}
+
+class _RevisionScreenState extends State<RevisionScreen> {
+  final Set<String> _rewarded = {};
+
+  @override
   Widget build(BuildContext context) {
+    final palette = context.palette;
     return Scaffold(
-      backgroundColor: AppColors.parchment,
       body: SafeArea(
         child: Consumer<RevisionProvider>(
           builder: (context, revisionProvider, _) {
@@ -32,7 +40,7 @@ class RevisionScreen extends StatelessWidget {
                       ),
                       Text(
                         'Due today: ${dueCards.length}',
-                        style: AppTextStyles.label(color: AppColors.smoke),
+                        style: AppTextStyles.label(color: palette.faint),
                       ),
                     ],
                   ),
@@ -44,7 +52,7 @@ class RevisionScreen extends StatelessWidget {
                         padding: EdgeInsets.all(AppSpacing.xxl),
                         child: Text(
                           'No revisions due today!',
-                          style: AppTextStyles.label(color: AppColors.smoke),
+                          style: AppTextStyles.label(color: palette.faint),
                         ),
                       ),
                     )
@@ -53,19 +61,21 @@ class RevisionScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: AppSpacing.md),
                           child: RevisionCardWidget(
                             card: card,
-                            onGotIt: () {
-                              revisionProvider.rateRevision(
+                            onGotIt: () async {
+                              await revisionProvider.rateRevision(
                                 context.read<UserProvider>().profile?.uid ?? '',
                                 card,
                                 5, // quality 5 = perfect recall
                               );
+                              _rewardReview(context, card.problemSlug, 5);
                             },
-                            onForgot: () {
-                              revisionProvider.rateRevision(
+                            onForgot: () async {
+                              await revisionProvider.rateRevision(
                                 context.read<UserProvider>().profile?.uid ?? '',
                                 card,
                                 1, // quality 1 = complete blackout
                               );
+                              _rewardReview(context, card.problemSlug, 1);
                             },
                           ),
                         )),
@@ -76,5 +86,11 @@ class RevisionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _rewardReview(BuildContext context, String slug, int quality) {
+    if (_rewarded.contains(slug)) return;
+    _rewarded.add(slug);
+    context.read<GamificationProvider>().recordReview(quality);
   }
 }
