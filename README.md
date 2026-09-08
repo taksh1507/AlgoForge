@@ -1,4 +1,4 @@
-# AlgoForge 🚀
+# AlgoForge 
 
 **AlgoForge** is an intelligent, adaptive Data Structures and Algorithms (DSA) learning and revision platform built with Flutter and Firebase. It dynamically syncs your real-time LeetCode progress and utilizes spaced repetition and a custom knowledge graph to help you master competitive programming efficiently.
 
