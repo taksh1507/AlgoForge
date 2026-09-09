@@ -96,4 +96,3 @@ dsa_platform_flutter/
    * Enter your LeetCode username and tap **Sync My Data**. The app will fetch your data, populate your radar chart, and build your personalized revision queue!
 
 ---
-*Built for the grind. Happy coding! 💻*
