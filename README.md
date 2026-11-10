@@ -1,4 +1,10 @@
-# AlgoForge 
+# AlgoForge
+
+[![Flutter](https://img.shields.io/badge/Flutter-3.10%2B-02569B?logo=flutter&logoColor=white)](dsa_platform_flutter)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=white)](functions)
+[![Dart](https://img.shields.io/badge/Dart-3-0175C2?logo=dart&logoColor=white)](dsa_platform_flutter/lib)
+[![GitHub release](https://img.shields.io/github/v/release/taksh1507/AlgoForge?include_prereleases)](https://github.com/taksh1507/AlgoForge/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **AlgoForge** is an intelligent, adaptive Data Structures and Algorithms (DSA) learning and revision platform built with Flutter and Firebase. It dynamically syncs your real-time LeetCode progress and utilizes spaced repetition and a custom knowledge graph to help you master competitive programming efficiently.
 
@@ -95,4 +101,20 @@ dsa_platform_flutter/
    * Go to the Profile or Dashboard tab.
    * Enter your LeetCode username and tap **Sync My Data**. The app will fetch your data, populate your radar chart, and build your personalized revision queue!
 
+## ✅ Verification Status
+
+Verified in this audit:
+
+| Check | Result |
+| --- | --- |
+| Firebase Functions `npm ci` | PASS |
+| Firebase Functions `npm run build` (`tsc`) | PASS — TypeScript compiles cleanly |
+| `data/knowledge_graph.json` | PASS — valid JSON |
+| Flutter app (`flutter pub get` / `flutter build`) | not testable here — Flutter SDK not installed in this environment; requires `google-services.json` / `GoogleService-Info.plist` |
+
+Notes:
+- No test suite or CI workflow exists in the repository; verification above is install/build-level, not automated.
+- The Flutter app requires a Firebase project (Firestore + Auth) and an active deployment of the [Alfa LeetCode API](https://github.com/taksh1507/alfa-leetcode-api) for live sync.
+
 ---
+
